@@ -5,4 +5,4 @@ AuctionsTableIAM:
     - dynamodb:Query
     - dynamodb:Scan
     - dynamodb:PutItem
-  Resource: "${self:custom.AuctionsTable.arn}"
+  Resource: ${self:custom.AuctionsTable.arn}
