@@ -34,7 +34,7 @@ functions:
 custom:
   AuctionsTable:
     name: !Ref AuctionsTable
-    arn: !GetAtt AuctionsTable.Arn*
+    arn: !GetAtt AuctionsTable.Arn
   # dynamodb:
   #   start:
   #     port: 8000  # Use the port you prefer
