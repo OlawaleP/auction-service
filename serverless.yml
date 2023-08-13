@@ -1,0 +1,44 @@
+service: auction-service
+
+configValidationMode: error 
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+  - serverless-dynamodb-local
+  - serverless-offline
+provider:
+  name: aws
+  runtime: nodejs16.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-1
+  environment: 
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
+  iam:  
+    role:
+      statements:
+        - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+
+resources:
+  Resources:
+    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}  
+
+functions:
+  createAuction:
+    handler: src/handlers/createAuction.handler
+    events:
+      - http:
+          method: POST
+          path: /auction
+custom:
+  AuctionsTable:
+    name: !Ref AuctionsTable
+    arn: !GetAtt AuctionsTable.Arn*
+  # dynamodb:
+  #   start:
+  #     port: 8000  # Use the port you prefer
+  #     inMemory: true
+  #     migrate: true
+  bundle:
+    linting: false
